@@ -12,8 +12,11 @@ function App() {
 
   function fetchRooms() {
     axios.get('http://localhost:8080/rooms')
-      .then(res => setRooms(res.data))
-      .catch(console.error);
+      .then(res => {
+      const sortedRooms = res.data.sort((a, b) => Number(a.roomNo) - Number(b.roomNo));
+      setRooms(sortedRooms);
+    })
+    .catch(console.error);
   }
 
   function handleChange(e) {
@@ -55,13 +58,15 @@ function App() {
         <form onSubmit={handleSubmit} className="form-column">
           <div className="form-group">
             <input
-              type="text"
+              type="number"
               name="roomNo"
-              placeholder="Room No"
+              placeholder="Room No."
               value={formData.roomNo}
               onChange={handleChange}
               className="form-control"
               disabled={!!editingRoomNo}
+              min = "1"
+              max = "50"
               required
             />
           </div>
@@ -69,10 +74,11 @@ function App() {
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
               className="form-control"
+              maxLength="40"
               required
             />
           </div>
@@ -80,21 +86,23 @@ function App() {
             <input
               type="text"
               name="contact"
-              placeholder="Contact"
+              placeholder="email or contact No."
               value={formData.contact}
               onChange={handleChange}
               className="form-control"
+              maxLength="40"
               required
             />
           </div>
           <div className="form-group">
             <input
-              type="number"
+              type="text"
               name="date"
-              placeholder="Date (e.g. 20250528)"
+              placeholder="Duration of Stay"
               value={formData.date}
               onChange={handleChange}
               className="form-control"
+              maxLength="40"
               required
             />
           </div>
